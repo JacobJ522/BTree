@@ -1,8 +1,9 @@
 local createState = require(script.State)
+local Evaluate = require(script.Evaluate)
 
 type BTreeImpl = {
     __index: BTreeImpl,
-    createNode: (type: string, children: {}) -> (),
+    createNode: (type: string, ...any) -> (),
     getState: () -> (),
     setState: (string) -> ()
 }
@@ -10,18 +11,21 @@ type BTreeImpl = {
 local BTree: BTreeImpl = {} :: BTreeImpl
 BTree.__index = BTree
 
-function BTree.createNode(type, children)
+function BTree.createNode(type, ...)
     local self = {}
 
-    self._children = children
-    self._type = type
-
+    --initialize node state
     self._state = createState({
-        "Succeeded",
-        "Failed",
+        "Idle",
         "Running",
-        "Idle"
+        "Succeeded",
+        "Failed"
     })
+
+    self.tick = function() end
+
+    --evaluate node 
+    self = Evaluate(self, type, {...})
 
     return setmetatable(self, BTree)
 end

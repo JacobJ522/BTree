@@ -5,10 +5,10 @@ type state = {
 }
 
 local function createState<T>(states: {T}): {T}
-    local state = { _current = nil }
+    local state = { _current = states[1] }
 
     function state:setState(_state)
-        if states[_state] then
+        if table.find(states, _state) then
             self._current = _state
         end
     end

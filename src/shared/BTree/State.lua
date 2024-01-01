@@ -1,25 +1,24 @@
-type List<T> = {T}
-
-type state = {
-    setState: (state: string | number) -> ()
+--!strict
+export type state<T> = {
+    _current: T,
+    setState: (state: T) -> (),
+    getState: () -> T
 }
 
-local function createState<T>(states: {T}): {T}
-    local state = { _current = states[1] }
+local function createState<T>(states: {T})
+    local _state = { _current = states[1] }
 
-    function state:setState(_state)
+    function _state:setState(_state)
         if table.find(states, _state) then
             self._current = _state
         end
     end
 
-    function state:getState()
+    function _state:getState()
         return self._current
     end
 
-    return state
+    return _state
 end
-
---local st: {string | number} = createState({1,3,4})
 
 return createState

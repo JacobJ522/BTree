@@ -4,8 +4,7 @@ local types = {
 
         node.tick = function()
             for _, childNode in ipairs(children) do
-                
-                return --TODO: Need to figure out approach/how to run nodes (can nodes run consecutively?)
+                --do stuff
 
             end
         end
@@ -20,7 +19,12 @@ local types = {
 }
 
 local function Evaluate(node, type, args)
-    return types[type](node, args)
+    if types[type] then
+        return types[type](node, args)
+    else
+        --error
+        return node
+    end
 end
 
 return Evaluate
